@@ -6,21 +6,23 @@ using namespace std;
 
 struct trinomial_tree
 {
-    float S_0, u, d, p, m, q, vol, r, tick_period, v;
+    float S_0, u, d, p, m, q, vol, r, tick_period, v, div;
     int _levels;
     vector<vector<float>> _tree;
 
-    trinomial_tree(float price_t_0 ,float realized_vol, float risk_free_rate, int levels, float total_time){
+    trinomial_tree(float price_t_0 ,float realized_vol, float risk_free_rate, int levels, float total_time, float div,float dx = -1){
         S_0 = price_t_0;
         vol = realized_vol;
         _levels = levels;
         r = risk_free_rate;
-        tick_period = total_time / _levels;
+        tick_period = total_time / (_levels-1);
         // calculate the u and d for the given rates as well as p
-        u = exp(vol*sqrt(2*tick_period));
+        if(dx == -1){
+            dx = vol*sqrt(3*tick_period);
+        }
+        u = exp(dx);
         d = 1 / u;
-        v = risk_free_rate - pow(vol, 2) / 2;
-        float dx = vol*sqrt(3*tick_period);
+        v = risk_free_rate - div -  pow(vol, 2) / 2;
         //risk-neutral probabilities
         p = 0.5*((vol*vol*tick_period + v*v*tick_period*tick_period) / (dx*dx) + (v*tick_period) / dx);
         m = 1 - ((vol*vol*tick_period + v*v*tick_period*tick_period) / (dx*dx));
@@ -57,7 +59,7 @@ struct trinomial_tree
 };
 
 int main(){
-    trinomial_tree asset1(100, 0.2, 0.06, 5, 0.5);
+    trinomial_tree asset1(100, 0.2, 0.06, 4, 1, 0.03, 0.2);
     vector<vector<float>> eu_call_100 = asset1.get_value_of_european_options_call(100);
     for(auto x : eu_call_100){
         for(auto y: x){
