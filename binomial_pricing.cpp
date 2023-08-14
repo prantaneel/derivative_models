@@ -51,13 +51,6 @@ struct binomial_tree
 
 };
 
-struct trinomial_tree
-{
-    float S_0, u, d, p, vol, r, tick_period, v;
-    int _levels;
-    vector<vector<float>> _tree;
-};
-
 
 int main(){
     binomial_tree asset1(100, 0.2, 0.06, 60, 0.5);
