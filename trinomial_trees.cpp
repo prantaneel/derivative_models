@@ -59,7 +59,7 @@ struct trinomial_tree
 };
 
 int main(){
-    trinomial_tree asset1(100, 0.2, 0.06, 4, 1, 0.03, 0.2);
+    trinomial_tree asset1(100, 0.2, 0.06, 10, 1, 0.03, 0.2);
     vector<vector<float>> eu_call_100 = asset1.get_value_of_european_options_call(100);
     for(auto x : eu_call_100){
         for(auto y: x){
